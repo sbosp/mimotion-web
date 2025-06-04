@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}仪表盘 - 小米运动助手{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <!-- 账号统计 -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                    <i class="fas fa-users text-white text-2xl"></i>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">总账号数</dt>
+                        <dd class="text-3xl font-semibold text-gray-900">{{ total_accounts }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 活跃账号 -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                    <i class="fas fa-check-circle text-white text-2xl"></i>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">活跃账号</dt>
+                        <dd class="text-3xl font-semibold text-gray-900">{{ active_accounts }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 同步成功率 -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                    <i class="fas fa-sync text-white text-2xl"></i>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">同步成功率</dt>
+                        <dd class="text-3xl font-semibold text-gray-900">
+                            {{ "%.1f"|format(success_syncs/total_syncs*100 if total_syncs > 0 else 0) }}%
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 今日同步次数 -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                    <i class="fas fa-walking text-white text-2xl"></i>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">今日同步次数</dt>
+                        <dd class="text-3xl font-semibold text-gray-900">{{ total_syncs }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 图表区域 -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <!-- 步数趋势图 -->
+    <div class="bg-white shadow rounded-lg p-4">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">步数趋势</h3>
+        <div id="steps-chart" style="height: 300px;"></div>
+    </div>
+
+    <!-- 同步成功率图 -->
+    <div class="bg-white shadow rounded-lg p-4">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">同步成功率</h3>
+        <div id="success-rate-chart" style="height: 300px;"></div>
+    </div>
+</div>
+
+<!-- 最近同步记录 -->
+<div class="mt-8">
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:px-6">
+            <h3 class="text-lg font-medium text-gray-900">最近同步记录</h3>
+        </div>
+        <div class="border-t border-gray-200">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">账号</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">步数</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">消息</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">时间</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for record in recent_records %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ record.account.mi_user }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ record.step_count }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if record.status %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    成功
+                                </span>
+                                {% else %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    失败
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ record.message }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ record.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // 初始化步数趋势图
+    var stepsChart = echarts.init(document.getElementById('steps-chart'));
+    var successRateChart = echarts.init(document.getElementById('success-rate-chart'));
+    
+    // 获取最近7天的数据
+    var dates = [];
+    var steps = [];
+    var successRates = [];
+    
+    {% for record in recent_records %}
+    dates.push('{{ record.created_at.strftime("%m-%d %H:%M") }}');
+    steps.push({{ record.step_count }});
+    successRates.push({{ 1 if record.status else 0 }});
+    {% endfor %}
+    
+    // 步数趋势图配置
+    var stepsOption = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        xAxis: {
+            type: 'category',
+            data: dates.reverse(),
+            axisLabel: {
+                rotate: 45
+            }
+        },
+        yAxis: {
+            type: 'value',
+            name: '步数'
+        },
+        series: [{
+            data: steps.reverse(),
+            type: 'line',
+            smooth: true,
+            name: '步数',
+            areaStyle: {}
+        }]
+    };
+    
+    // 同步成功率图配置
+    var successRateOption = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        xAxis: {
+            type: 'category',
+            data: dates,
+            axisLabel: {
+                rotate: 45
+            }
+        },
+        yAxis: {
+            type: 'value',
+            name: '成功率',
+            axisLabel: {
+                formatter: '{value}%'
+            },
+            max: 100
+        },
+        series: [{
+            data: successRates.map(v => v * 100),
+            type: 'line',
+            smooth: true,
+            name: '成功率',
+            areaStyle: {}
+        }]
+    };
+    
+    stepsChart.setOption(stepsOption);
+    successRateChart.setOption(successRateOption);
+    
+    // 响应式调整
+    window.addEventListener('resize', function() {
+        stepsChart.resize();
+        successRateChart.resize();
+    });
+});
+</script>
+{% endblock %} 

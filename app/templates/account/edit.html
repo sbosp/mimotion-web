@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}编辑账号 - 小米运动助手{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="px-4 py-5 sm:px-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                编辑小米运动账号
+            </h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                修改账号配置信息
+            </p>
+        </div>
+        <div class="border-t border-gray-200">
+            <form method="POST" action="{{ url_for('account.edit_account', id=account.id) }}" class="divide-y divide-gray-200">
+                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <label class="text-sm font-medium text-gray-500">账号</label>
+                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                        <p class="text-sm text-gray-900">{{ account.mi_user }}</p>
+                    </div>
+                </div>
+
+                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <label for="min_step" class="text-sm font-medium text-gray-500">最小步数</label>
+                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                        <input type="number" name="min_step" id="min_step" value="{{ account.min_step }}" required class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
+                        <p class="mt-2 text-sm text-gray-500">每天步数的最小值，实际步数将根据时间线性增长</p>
+                    </div>
+                </div>
+
+                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <label for="max_step" class="text-sm font-medium text-gray-500">最大步数</label>
+                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                        <input type="number" name="max_step" id="max_step" value="{{ account.max_step }}" required class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
+                        <p class="mt-2 text-sm text-gray-500">每天步数的最大值，22点时达到最大值</p>
+                    </div>
+                </div>
+
+                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <label for="sync_start_hour" class="text-sm font-medium text-gray-500">同步开始时间</label>
+                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                        <select name="sync_start_hour" id="sync_start_hour" class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
+                            {% for hour in range(0, 24) %}
+                            <option value="{{ hour }}" {% if hour == account.sync_start_hour %}selected{% endif %}>{{ "%02d"|format(hour) }}:00</option>
+                            {% endfor %}
+                        </select>
+                        <p class="mt-2 text-sm text-gray-500">每天开始同步步数的时间</p>
+                    </div>
+                </div>
+
+                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <label for="sync_end_hour" class="text-sm font-medium text-gray-500">同步结束时间</label>
+                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                        <select name="sync_end_hour" id="sync_end_hour" class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
+                            {% for hour in range(0, 24) %}
+                            <option value="{{ hour }}" {% if hour == account.sync_end_hour %}selected{% endif %}>{{ "%02d"|format(hour) }}:00</option>
+                            {% endfor %}
+                        </select>
+                        <p class="mt-2 text-sm text-gray-500">每天结束同步步数的时间</p>
+                    </div>
+                </div>
+
+                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <label for="is_active" class="text-sm font-medium text-gray-500">状态</label>
+                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                        <div class="relative flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="is_active" name="is_active" type="checkbox" {% if account.is_active %}checked{% endif %} class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="is_active" class="font-medium text-gray-700">启用账号</label>
+                                <p class="text-gray-500">启用后将按计划自动同步步数</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="py-4 sm:py-5 sm:px-6">
+                    <div class="flex justify-end">
+                        <a href="{{ url_for('account.list_accounts') }}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            取消
+                        </a>
+                        <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            保存
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

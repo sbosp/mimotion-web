@@ -1,188 +1,116 @@
-# mimotion
+# 小米运动助手 (MiMotion Assistant)
 
-![ 刷步数](https://github.com/TonyJiangWJ/mimotion/actions/workflows/run.yml/badge.svg)
-[![GitHub forks](https://img.shields.io/github/forks/TonyJiangWJ/mimotion?style=flat-square)](https://github.com/TonyJiangWJ/mimotion/forks)
-[![GitHub stars](https://img.shields.io/github/stars/TonyJiangWJ/mimotion?style=flat-square)](https://github.com/TonyJiangWJ/mimotion/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/TonyJiangWJ/mimotion?style=flat-square)](https://github.com/TonyJiangWJ/mimotion/issues)
-[![Page Views Count](https://badges.toozhao.com/badges/01HV8REWHW88Z2QQAK7XZ3Y9ZN/green.svg)](https://badges.toozhao.com/stats/01HV8REWHW88Z2QQAK7XZ3Y9ZN "Get your own page views count badge on badges.toozhao.com")
+一个基于 Flask 的小米运动（Zepp Life）自动刷步数工具，提供友好的 Web 界面和丰富的功能。
 
-## 小米运动自动刷步数（支持邮箱登录）
+![小米运动助手](https://img.shields.io/badge/小米运动助手-v1.0-blue)
+![Flask](https://img.shields.io/badge/Flask-v2.2.5-green)
+![Python](https://img.shields.io/badge/Python-v3.6+-orange)
 
-- 小米运动自动刷步数，小米运动APP现已改名 `Zepp Life`，为方便说明，后面还是称其为小米运动。但下载注册时请搜索 `Zepp Life`。
-- 注册账号后建议先去以下网站测试自己的账号刷步数是否正常：https://tool.aoaostar.com/mimotion
-- 如无法刷步数同步到支付宝等，建议重新注册一个新的。
+## 功能特点
 
-### 如果觉得好用，请给一个免费的[star](https://github.com/TonyJiangWJ/mimotion/)吧
+- 🌟 **美观的 Web 界面**：基于 TailwindCSS 构建的现代化界面
+- 👥 **多账号管理**：支持添加多个小米运动账号，统一管理和监控
+- ⏰ **智能时间控制**：设置同步时间范围，根据时间自动计算合理的步数
+- 📊 **数据可视化**：提供步数趋势图表和同步成功率统计分析
+- 🔄 **自动定时同步**：按计划自动同步步数，无需手动操作
+- 📱 **响应式设计**：在各种设备上都能良好显示
 
-## Github Actions 部署指南
+## 安装步骤
 
-### 一、Fork 此仓库，然后创建token
+### 1. 克隆仓库
 
-#### 创建小权限的限时token，推荐
-
-- 前往[https://github.com/settings/tokens?type=beta](https://github.com/settings/tokens?type=beta)创建个人token，建议使用Fine-grained tokens，避免token泄露导致不必要的麻烦。
-- 填写token的名称，用于自己区别干嘛用的。
-- 选择token有效期，最大时长为1年。一年后需要重新续期或重建，唯一缺点
-- `Repository access` 选择 `Only select repositories` 勾选自己fork后的仓库，下拉可搜索：输入 mimotion 进行检索
-- 点击 `Repository permissions` 展开菜单，并勾选以下四个权限即可，其他的可以不勾选
-  - `Actions` Access: `Read and write` 用于获取Actions的权限
-  - `Contents` Access: `Read and write` 用于更新定时任务和日志文件的权限
-  - `Metadata` Access: `Read-only` 这个自带的必选
-  - `Workflows` Access: `Read and write` 获取用于更新 `.github/workflow` 下文件的权限
-
-#### 你也可以创建更大权限的不限时token
-
-- 建议使用上面的小权限token，这个token无法指定某一个仓库的权限，也就是token一旦泄露将有可能导致其他人直接自由访问和修改你的所有仓库代码
-- 前往[https://github.com/settings/tokens/new](https://github.com/settings/tokens/new)创建
-- 填写token名称，选择有效期
-- `Select scopes` 勾选 `repo` 和 `workflow` 即可
-
-#### 创建完毕后点击最底下的 `Generate token` 即可生成token，复制token并自己保存一下以备后续使用，关闭当前页面后将无法再看到它。
-
-### 二、设置账号密码
-
-#### 前往仓库设置创建变量
-
-- Settings-->Secrets and variables-->Actions-->New repository secret
-- 快捷跳转地址 [https://github.com/${你的github用户名}/mimotion/settings/secrets/actions](../../settings/secrets/actions)
-- 点击右侧的 `New repository secret` 即可添加Secret
-
-#### 添加名为 **PAT** 的Secret变量，值为第一步申请的token
-
-#### 添加名为 **CONFIG** 的Secret变量
-
-- 需要注意Secret变量是密文，提交后无法查看，只能删除或用新值更新，建议本地保存一下自己的配置数据方便后期修改。
-- CONFIG的内容：
-
-  ```json
-  {
-    "USER": "abcxxx@xx.com",
-    "PWD": "password",
-    "MIN_STEP": "18000",
-    "MAX_STEP": "25000",
-    "PUSH_PLUS_TOKEN": "",
-    "PUSH_PLUS_HOUR": "",
-    "PUSH_PLUS_MAX": "30",
-    "SLEEP_GAP": "5",
-    "USE_CONCURRENT": "False"
-  }
-  ```
-
-  | 字段名             | 格式                                                                                              |
-  |-----------------|-------------------------------------------------------------------------------------------------|
-  | USER            | 小米运动登录账号，仅支持小米运动账号对应的手机号或邮箱，不支持小米账号                                                             |
-  | PWD             | 小米运动登录密码，仅支持小米运动账号对应的密码                                                                         |
-  | MIN_STEP        | 最小步数                                                                                            |
-  | MAX_STEP        | 最大步数，最大步数和最小步数随机范围随着时间线性增加，北京时间22点达到最大值                                                         |
-  | PUSH_PLUS_TOKEN | 推送加的个人token,申请地址[pushplus](https://www.pushplus.plus/push1.html)，工作流执行完成后推送每个账号的执行状态信息，如没有则不要填写 |
-  | PUSH_PLUS_HOUR  | 限制只在某个整点进行pushplus的推送，值为整数，比如设置21，则只在北京时间21点XX分执行时才进行pushplus的消息推送。如不设置或值非数字则每次执行后都会进行推送        |
-  | PUSH_PLUS_MAX   | 设置pushplus最大推送账号详情数，默认为30，超过30个账号将只推送概要信息：多少个成功多少个失败。因为数量太多会导致内容过长无法推送。具体最大值请自行调试               |
-  | SLEEP_GAP       | 多账号执行间隔，单位秒，如果账号比较多可以设置的短一点，默认为5秒                                                               |
-  | USE_CONCURRENT  | 是否使用多线程，实验性功能，未测试是否有效。账号多的可以试试，将它设置为True即可，启用后 `SLEEP_GAP` 将不再生效                                |
-
-### 三、多账户设置(如用不上请忽略)
-
-- 多账户请用 **#** 分割 然后保存到变量 **USER** 和 **PWD**
-- 理论上账户数量不受限制，但是实际要看github actions的资源和华米接口是否有限制，pushplus消息内容应该也有最大长度限制，反正具体上限请自行测试
-
-#### 例如
-
-```json
-{
-  "USER": "13800138000#13800138001",
-  "PWD": "abc123qwe#abcqwe2",
-  "MIN_STEP": "18000",
-  "MAX_STEP": "25000",
-  "PUSH_PLUS_TOKEN": "",
-  "PUSH_PLUS_HOUR": ""
-}
+```bash
+git clone https://github.com/yourusername/mimotion.git
+cd mimotion
 ```
 
-#### 注意 **#** 分隔的账号和密码数量必须匹配，否则将跳过执行
+### 2. 创建虚拟环境
 
-### 四、自定义启动时间
+```bash
+# 使用 conda 创建虚拟环境
+conda create -n mimotion python=3.8
+conda activate mimotion
 
-#### 两种方式自定义启动时间
+# 或使用 venv
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate  # Windows
+```
 
-##### 1、添加名为 `CRON_HOURS` 的Variables变量 `Settings-->Secrets and variables-->Actions-->New repository variables` 注意不是Secret
-- 快捷跳转地址 [https://github.com/${你的github用户名}/mimotion/settings/variables/actions](../../settings/variables/actions)
-  - 填写自动执行的时间，单位为小时，此处需要设置UTC时间，例如设置 `0,2,4,6,8,14` 则会在北京时间 `8,10,12,14,16,22` 点触发执行
-- 添加完成后可以在Actions中手动触发：`Random Cron` 来触发替换，或者等下一次定时执行时它将会自动替换。
+### 3. 安装依赖
 
-##### 2、编辑 **.github/workflows/run.yml** 中的cron表达式
-  - cron表达式格式如下: `分 小时 日期 月份 年份`
-  - github actions中执行时间为UTC时间，即**北京时间-8**，如果需要每天`8，10，12，14，16，22`点执行，则设置cron为`0 0,2,4,6,8,14 * * *`
-  ```yaml
-  on:
-    schedule:
-      - cron: '0 0,2,4,6,8,14 * * *'
-  ```
-  - **注意** 如果已添加 `CRON_HOURS` 变量，则修改此文件的cron表达式会失效，在下次执行 `Random Cron` 后表达式中小时的部分会被覆盖为 `CRON_HOURS` 配置的值
+```bash
+pip install -r requirements.txt
+```
 
-- 注意以上两种方式二选一即可，推荐直接使用方式1，变量值填写的是逗号分隔的数字，别乱填别的报错别找我！
-- github actions 0点为执行高峰，排队可能会延后一两小时才执行，建议直接从2开始
+### 4. 初始化数据库
 
-### 五、手动触发测试工作流
+```bash
+python update_db.py
+```
 
-- 前往Actions,左侧选择 `刷步数`，快捷链接：[https://github.com/${你的github用户名}/mimotion/actions/workflows/run.yml](../../actions/workflows/run.yml)
-- 新fork的仓库默认未启用工作流，进入Actions后点击 `I understand my workflows, go ahead and enable them` 启用，然后左侧选择 `刷步数` 之后，再点击 `enable workflow` 启用工作流。请确保开启工作流，否则不会定时执行。
-- 点击右侧的`Run workflow`触发执行，触发后刷新即可查看执行记录。验证是否正确配置并执行刷步数。
+### 5. 启动应用
 
-### 六、感谢列表
+```bash
+python run.py
+```
 
-本项目基于 `https://github.com/xunichanghuan/mimotion(已被ban)` 和 [https://github.com/huangshihai/mimotion](https://github.com/huangshihai/mimotion) 项目修改，特此感谢
+访问 http://127.0.0.1:5002 即可使用。
 
-### 七、同步最新代码
+## 使用方法
 
-- 点击仓库界面上的 `Sync fork`，找不到的话直接Ctrl+F网页查找
-- 然后点击 `Update branch` 等待同步完成即可，如有其他提示请自行按提示操作
-- 同步更新后请自己再次仔细阅读README，配置项目修改等请自行对比，更新后因为配置不正确导致无法运行请不要找我
+1. **注册/登录**：首次使用需要注册账号，已有账号直接登录
+2. **添加小米账号**：在"账号管理"页面添加小米运动账号
+3. **设置参数**：
+   - 设置步数范围（最小步数和最大步数）
+   - 设置同步时间范围（开始时间和结束时间）
+4. **查看统计**：在账号详情页查看同步记录和统计图表
+5. **手动同步**：点击"同步"按钮可立即执行同步操作
+
+## 项目结构
+
+```
+mimotion/
+├── app/                    # 应用主目录
+│   ├── controllers/        # 控制器
+│   ├── models/             # 数据模型
+│   ├── scheduler/          # 定时任务
+│   ├── static/             # 静态资源
+│   ├── templates/          # 模板文件
+│   ├── utils/              # 工具函数
+│   └── __init__.py         # 应用初始化
+├── instance/               # 实例配置
+├── run.py                  # 启动脚本
+├── update_db.py            # 数据库更新脚本
+└── requirements.txt        # 依赖列表
+```
+
+## 技术栈
+
+- **后端**：Flask、SQLAlchemy、APScheduler
+- **前端**：TailwindCSS、Font Awesome、ECharts
+- **数据库**：SQLite
 
 ## 注意事项
 
-1. 默认每天运行6+次，由run.yml中的cron控制，分钟为随机值，执行后自动更新分钟值，随机后可能当前整点二次执行，例如：8:05分执行后，分钟值随机为50，则会在8:50再次执行。
-- 如果配置了 `CRON_HOURS` Variable变量，则脚本将自动判断，例如8:05分执行后，将从小时中剔除8，即8:00-8:59都不会再重复执行，避免随机的步数混乱。
+1. 本项目仅供学习交流使用，请勿用于商业用途
+2. 请合理设置步数范围，避免设置不合理的步数
+3. 请遵守小米运动的使用条款
+4. 账号密码等敏感信息存储在本地数据库，请确保安全
 
-2. 多账户的数量和密码请一定要对上 不然无法使用!!!
+## 开源许可
 
-3. 启动时间得是UTC时间!
+本项目采用 MIT 许可证，详见 [LICENSE](LICENSE) 文件。
 
-4. 如果支付宝没有更新步数，到小米运动->设置->账号->注销账号->清空数据，然后重新登录，重新绑定第三方。建议去网站测试：[出去走走：https://motion.faithxy.com/](https://motion.faithxy.com/)
+## 致谢
 
-5. 小米运动不会更新步数，只有关联的会同步！！！！！
+本项目基于以下开源项目开发：
 
-6. 请各位在使用时Fork[当前仓库](https://github.com/TonyJiangWJ/mimotion/)，防止出现不必要的bug.
+- [TonyJiangWJ/mimotion](https://github.com/TonyJiangWJ/mimotion) - 提供了小米运动刷步数的核心算法
+- [Flask](https://flask.palletsprojects.com/) - Python Web 框架
+- [TailwindCSS](https://tailwindcss.com/) - CSS 框架
+- [ECharts](https://echarts.apache.org/) - 数据可视化图表库
 
-7. 请注意，账号不是 [小米账号]，而是 [小米运动/ZeppLife] 的账号。
+---
 
-8. 最大步数和最小步数随着时间增长，10点执行时范围为10/22 \* 18000 ~ 10/22 \* 25000：8181 ~ 11363，以此类推，在北京时间22点达到最大值，即22点执行时随机步数的范围为18000-25000之间。要修改这个范围可以修改CONFIG中的MIN_STEP和MAX_STEP。
-
-9. cron的执行根据github actions的资源进行排队，并不是百分百按指定的时间进行运行，请知悉。
-
-### 查看执行记录
-
-- 前往 [Actions](../../actions) 可以查看所有工作流的执行历史
-  - `刷步数 #41: Scheduled` 代表是定时任务触发，`刷步数 #33: Manually run by xxx` 代表手动触发
-- 点击其中一条记录，可以查看执行详情，这里以 `刷步数` 为例：
-  - 详情界面 `Jobs` 可以查看到一个 `build` ，点击它查看执行步骤
-  - 执行步骤中主要关注 `开始` ，点击 `开始` 展开详情
-  - 展开后便可以查看到执行日志，如果执行成功，则会显示每个账号当前随机的步数是多少
-  - 如果执行失败，则需要根据实际情况分析具体失败原因
-- 对于随机Cron的工作流 `Random Cron`，它会在 `刷步数` 执行成功后触发，执行后会更新cron表达式创建随机的分钟值，然后提交到git仓库。这一步失败的主要原因有：
-  - `PAT` Secret变量，也就是个人token设置的不正确
-  - `CRON_HOURS` Variable变量设置的不正确，需要逗号分隔的小时字符串例如：`1,3,4,5,6,7` 。不要添加奇奇怪怪的东西
-  - 其他请见执行日志
-- 随机Cron运行完毕后可以查看 `cron_change_time` 文件的内容，记录了触发方式、当前触发时间、cron表达式信息、下一次定时触发时间等信息，示例如下：
-  ```log
-  trigger by: workflow_run
-  current system time:
-  UTC: 23-06-03 12:56:53
-  北京时间: 23-06-03 20:56:53
-  current cron:
-  UTC时间: '48 1,4,7,10,12,14 * * *'
-  北京时间: '48 9,12,15,18,20,22 * * *'
-  next cron:
-  UTC时间: '37 1,4,7,10,12,14 * * *'
-  北京时间: '37 9,12,15,18,20,22 * * *'
-  next exec time: UTC(14:37) 北京时间(22:37)
-  ```
+如有问题或建议，欢迎提交 Issue 或 Pull Request。
