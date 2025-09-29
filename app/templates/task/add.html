@@ -1,80 +1,58 @@
 {% extends "base.html" %}
 
-{% block title %}添加账号 - 小米运动助手{% endblock %}
+{% block title %}添加任务{% endblock %}
 
 {% block content %}
-<div class="max-w-2xl mx-auto">
-    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-        <div class="px-4 py-5 sm:px-6">
+<div class="w-full px-4 sm:max-w-2xl sm:mx-auto">
+    <div class="bg-white shadow overflow-hidden rounded-lg">
+        <div class="px-4 py-4 sm:py-5 sm:px-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900">
                 微信刷步
             </h3>
-            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+            <p class="mt-1 text-sm text-gray-500">
                 请填写zepp账号信息，添加后将自动进行步数同步
             </p>
         </div>
         <div class="border-t border-gray-200">
             <form method="POST" action="{{ url_for('task.add_task') }}" class="divide-y divide-gray-200">
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <label for="mi_user" class="text-sm font-medium text-gray-500">账号</label>
-                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                        <input type="text" name="mi_user" id="mi_user" required class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" placeholder="手机号或邮箱">
-                    </div>
+                <div class="py-3 sm:py-4 px-4 sm:px-6">
+                    <label for="mi_user" class="block text-sm font-medium text-gray-700 mb-2">账号</label>
+                    <input type="text" name="mi_user" id="mi_user" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" placeholder="邮箱">
                 </div>
 
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <label for="mi_password" class="text-sm font-medium text-gray-500">密码</label>
-                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                        <input type="password" name="mi_password" id="mi_password" required class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" placeholder="小米运动密码">
-                    </div>
+                <div class="py-3 sm:py-4 px-4 sm:px-6">
+                    <label for="mi_password" class="block text-sm font-medium text-gray-700 mb-2">密码</label>
+                    <input type="password" name="mi_password" id="mi_password" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" placeholder="zepp密码">
                 </div>
 
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <label for="min_step" class="text-sm font-medium text-gray-500">最小步数</label>
-                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                        <input type="number" name="min_step" id="min_step" value="6666" required class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
-                        <p class="mt-2 text-sm text-gray-500">每天步数的最小值，建议不超过49000步，超过容易封号</p>
-                    </div>
+                <div class="py-3 sm:py-4 px-4 sm:px-6">
+                    <label for="min_step" class="block text-sm font-medium text-gray-700 mb-2">最小步数</label>
+                    <input type="number" name="min_step" id="min_step" value="6666" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                    <p class="mt-2 text-xs sm:text-sm text-gray-500">每天步数的最小值，建议不超过49000步，超过容易封号</p>
                 </div>
 
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <label for="max_step" class="text-sm font-medium text-gray-500">最大步数</label>
-                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                        <input type="number" name="max_step" id="max_step" value="9999" required class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
-                        <p class="mt-2 text-sm text-gray-500">每天步数的最大值，建议不超过49000步，超过容易封号</p>
-                    </div>
+                <div class="py-3 sm:py-4 px-4 sm:px-6">
+                    <label for="max_step" class="block text-sm font-medium text-gray-700 mb-2">最大步数</label>
+                    <input type="number" name="max_step" id="max_step" value="9999" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                    <p class="mt-2 text-xs sm:text-sm text-gray-500">每天步数的最大值，建议不超过49000步，超过容易封号</p>
                 </div>
 
-                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <label for="sync_start_hour" class="text-sm font-medium text-gray-500">同步时间</label>
-                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                        <select name="sync_start_hour" id="sync_start_hour" class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
-                            {% for hour in range(0, 24) %}
-                            <option value="{{ hour }}" {% if hour == 8 %}selected{% endif %}>{{ "%02d"|format(hour) }}:00</option>
-                            {% endfor %}
-                        </select>
-                        <p class="mt-2 text-sm text-gray-500">每天同步步数的时间</p>
-                    </div>
+                <div class="py-3 sm:py-4 px-4 sm:px-6">
+                    <label for="sync_start_hour" class="block text-sm font-medium text-gray-700 mb-2">同步时间</label>
+                    <select name="sync_start_hour" id="sync_start_hour" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        {% for hour in range(0, 24) %}
+                        <option value="{{ hour }}" {% if hour == 8 %}selected{% endif %}>{{ "%02d"|format(hour) }}:00</option>
+                        {% endfor %}
+                    </select>
+                    <p class="mt-2 text-xs sm:text-sm text-gray-500">每天同步步数的时间</p>
                 </div>
 
-{#                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">#}
-{#                    <label for="sync_end_hour" class="text-sm font-medium text-gray-500">同步结束时间</label>#}
-{#                    <div class="mt-1 sm:mt-0 sm:col-span-2">#}
-{#                        <select name="sync_end_hour" id="sync_end_hour" class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md">#}
-{#                            {% for hour in range(0, 24) %}#}
-{#                            <option value="{{ hour }}" {% if hour == 22 %}selected{% endif %}>{{ "%02d"|format(hour) }}:00</option>#}
-{#                            {% endfor %}#}
-{#                        </select>#}
-{#                        <p class="mt-2 text-sm text-gray-500">每天结束同步步数的时间</p>#}
-{#                    </div>#}
-{#                </div>#}
-
-                <div class="py-4 sm:py-5 sm:px-6">
-                    <div class="flex justify-end">
-                        <a href="{{ url_for('task.list_tasks') }}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <div class="py-4 px-4 sm:px-6">
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-end">
+                        <a href="{{ url_for('task.list_tasks') }}" class="w-full sm:w-auto text-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             取消
                         </a>
-                        <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button type="submit" class="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-3 text-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             保存
                         </button>
                     </div>
@@ -83,4 +61,4 @@
         </div>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}

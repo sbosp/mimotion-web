@@ -2,9 +2,9 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_apscheduler import APScheduler
 import os
-from datetime import datetime
 import logging
 from logging.handlers import RotatingFileHandler
+from app.scheduler import jobs
 
 # 初始化数据库
 db = SQLAlchemy()
@@ -18,6 +18,7 @@ def create_app():
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'dev-key-mimotion'
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or 'sqlite:///mimotion.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SCHEDULER_TIMEZONE'] = 'Asia/Shanghai'
     
     # 初始化数据库
     db.init_app(app)
@@ -45,7 +46,20 @@ def create_app():
     # 初始化定时任务
     scheduler.init_app(app)
     scheduler.start()
-    
+    if not scheduler.get_job('sync_steps'):
+        scheduler.add_job(
+            func=jobs.sync_steps,
+            trigger='cron',
+            id='sync_steps',
+            hour='*'
+        )
+        app.logger.info('注册sync_steps定时任务')
+    else:
+        app.logger.info('sync_steps任务已存在，跳过注册')
+    app.logger.info('当前注册的任务列表:')
+    for job in scheduler.get_jobs():
+        app.logger.info(f'任务ID: {job.id}, 触发器: {job.trigger}')
+
     # 创建数据库表
     with app.app_context():
         db.create_all()

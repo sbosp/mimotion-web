@@ -17,10 +17,7 @@ def list_tasks():
     tasks = current_user.tasks.all()
     parsed_tasks = []
     for task in tasks:
-        # 解析JSON字符串为字典
-        task_value_obj = json.loads(task.task_value)
-        # 将解析后的对象添加到任务对象中
-        task.parsed_task_value = task_value_obj
+        task.parsed_task_value = json.loads(task.task_value)
         parsed_tasks.append(task)
     return render_template('task/list.html', tasks=parsed_tasks)
 
@@ -37,16 +34,21 @@ def add_task():
         # sync_end_hour = request.form.get('sync_end_hour', 22)
 
         # 验证账号
-        # try:
-        #     mi_motion = MiMotion(mi_user, mi_password)
-        #     message, status = mi_motion.sync_step(100)  # 测试同步一个小步数
-        #     if not status:
-        #         flash('账号验证失败：' + message)
-        #         return redirect(url_for('task.add_task'))
-        # except Exception as e:
-        #     flash('账号验证失败：' + str(e))
-        #     return redirect(url_for('task.add_task'))
-        #
+        try:
+            mi_motion = MiMotion(task_value={
+                'mi_user': mi_user,
+                'mi_password': mi_password,
+                'min_step': 100,
+                'max_step': 200,
+            })
+            message, status = mi_motion.sync_step()  # 测试同步一个小步数
+            if not status:
+                flash('账号验证失败：' + message)
+                return redirect(url_for('task.add_task'))
+        except Exception as e:
+            flash('账号验证失败：' + str(e))
+            return redirect(url_for('task.add_task'))
+
         task_value = {
             'mi_user': mi_user,
             'mi_password': mi_password,
@@ -132,7 +134,7 @@ def task_records(id):
         Record.created_at <= end_date
     ).order_by(Record.created_at.desc()).all()
 
-    return render_template('task/records.html', task=task, records=records)
+    return render_template('task/records.html', task=task, task_value=json.loads(task.task_value), records=records)
 
 
 @task_bp.route('/task/<int:id>/sync')
@@ -151,7 +153,11 @@ def sync_task(id):
         # 记录结果
         record = Record(
             task_id=task.id,
-            task_value=mi_motion.step_count,
+            user_id=task.user_id,
+            task_type=1,
+            task_params=task.task_value,
+            task_name=json.loads(task.task_value).get('mi_user',''),
+            task_value=str(mi_motion.step_count),
             status=status,
             message=message
         )

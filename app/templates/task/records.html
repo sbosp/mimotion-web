@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}同步记录 - 小米运动助手{% endblock %}
+{% block title %}任务执行流水记录{% endblock %}
 
 {% block content %}
 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
@@ -9,26 +9,26 @@
             账号同步记录
         </h3>
         <p class="mt-1 max-w-2xl text-sm text-gray-500">
-            账号：{{ task.mi_user }}
+            账号：{{ task_value.mi_user }}
         </p>
     </div>
 
     <!-- 图表区域 -->
-    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <!-- 步数趋势图 -->
-            <div class="bg-white shadow rounded-lg p-4">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">步数趋势</h3>
-                <div id="steps-chart" style="height: 300px;"></div>
-            </div>
+<!--    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">-->
+<!--        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">-->
+<!--            &lt;!&ndash; 步数趋势图 &ndash;&gt;-->
+<!--            <div class="bg-white shadow rounded-lg p-4">-->
+<!--                <h3 class="text-lg font-medium text-gray-900 mb-4">步数趋势</h3>-->
+<!--                <div id="steps-chart" style="height: 300px;"></div>-->
+<!--            </div>-->
 
-            <!-- 同步成功率图 -->
-            <div class="bg-white shadow rounded-lg p-4">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">同步成功率</h3>
-                <div id="success-rate-chart" style="height: 300px;"></div>
-            </div>
-        </div>
-    </div>
+<!--            &lt;!&ndash; 同步成功率图 &ndash;&gt;-->
+<!--            <div class="bg-white shadow rounded-lg p-4">-->
+<!--                <h3 class="text-lg font-medium text-gray-900 mb-4">同步成功率</h3>-->
+<!--                <div id="success-rate-chart" style="height: 300px;"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 
     <!-- 记录列表 -->
     <div class="border-t border-gray-200">
@@ -83,85 +83,85 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-$(document).ready(function() {
-    // 初始化图表
-    var stepsChart = echarts.init(document.getElementById('steps-chart'));
-    var successRateChart = echarts.init(document.getElementById('success-rate-chart'));
-    
-    // 获取数据
-    var dates = [];
-    var steps = [];
-    var successRates = [];
-    
-    {% for record in records %}
-    dates.push('{{ record.created_at.strftime("%m-%d %H:%M") }}');
-    steps.push({{ record.step_count }});
-    successRates.push({{ 1 if record.status else 0 }});
-    {% endfor %}
-    
-    // 步数趋势图配置
-    var stepsOption = {
-        tooltip: {
-            trigger: 'axis'
-        },
-        xAxis: {
-            type: 'category',
-            data: dates.reverse(),
-            axisLabel: {
-                rotate: 45
-            }
-        },
-        yAxis: {
-            type: 'value',
-            name: '步数'
-        },
-        series: [{
-            data: steps.reverse(),
-            type: 'line',
-            smooth: true,
-            name: '步数',
-            areaStyle: {}
-        }]
-    };
-    
-    // 同步成功率图配置
-    var successRateOption = {
-        tooltip: {
-            trigger: 'axis'
-        },
-        xAxis: {
-            type: 'category',
-            data: dates,
-            axisLabel: {
-                rotate: 45
-            }
-        },
-        yAxis: {
-            type: 'value',
-            name: '成功率',
-            axisLabel: {
-                formatter: '{value}%'
-            },
-            max: 100
-        },
-        series: [{
-            data: successRates.map(v => v * 100),
-            type: 'line',
-            smooth: true,
-            name: '成功率',
-            areaStyle: {}
-        }]
-    };
-    
-    stepsChart.setOption(stepsOption);
-    successRateChart.setOption(successRateOption);
-    
-    // 响应式调整
-    window.addEventListener('resize', function() {
-        stepsChart.resize();
-        successRateChart.resize();
-    });
-});
-</script>
+<!--<script>-->
+<!--$(document).ready(function() {-->
+<!--    // 初始化图表-->
+<!--    var stepsChart = echarts.init(document.getElementById('steps-chart'));-->
+<!--    var successRateChart = echarts.init(document.getElementById('success-rate-chart'));-->
+<!--    -->
+<!--    // 获取数据-->
+<!--    var dates = [];-->
+<!--    var steps = [];-->
+<!--    var successRates = [];-->
+<!--    -->
+<!--    {% for record in records %}-->
+<!--    dates.push('{{ record.created_at.strftime("%m-%d %H:%M") }}');-->
+<!--    steps.push({{ record.step_count }});-->
+<!--    successRates.push({{ 1 if record.status else 0 }});-->
+<!--    {% endfor %}-->
+<!--    -->
+<!--    // 步数趋势图配置-->
+<!--    var stepsOption = {-->
+<!--        tooltip: {-->
+<!--            trigger: 'axis'-->
+<!--        },-->
+<!--        xAxis: {-->
+<!--            type: 'category',-->
+<!--            data: dates.reverse(),-->
+<!--            axisLabel: {-->
+<!--                rotate: 45-->
+<!--            }-->
+<!--        },-->
+<!--        yAxis: {-->
+<!--            type: 'value',-->
+<!--            name: '步数'-->
+<!--        },-->
+<!--        series: [{-->
+<!--            data: steps.reverse(),-->
+<!--            type: 'line',-->
+<!--            smooth: true,-->
+<!--            name: '步数',-->
+<!--            areaStyle: {}-->
+<!--        }]-->
+<!--    };-->
+<!--    -->
+<!--    // 同步成功率图配置-->
+<!--    var successRateOption = {-->
+<!--        tooltip: {-->
+<!--            trigger: 'axis'-->
+<!--        },-->
+<!--        xAxis: {-->
+<!--            type: 'category',-->
+<!--            data: dates,-->
+<!--            axisLabel: {-->
+<!--                rotate: 45-->
+<!--            }-->
+<!--        },-->
+<!--        yAxis: {-->
+<!--            type: 'value',-->
+<!--            name: '成功率',-->
+<!--            axisLabel: {-->
+<!--                formatter: '{value}%'-->
+<!--            },-->
+<!--            max: 100-->
+<!--        },-->
+<!--        series: [{-->
+<!--            data: successRates.map(v => v * 100),-->
+<!--            type: 'line',-->
+<!--            smooth: true,-->
+<!--            name: '成功率',-->
+<!--            areaStyle: {}-->
+<!--        }]-->
+<!--    };-->
+<!--    -->
+<!--    stepsChart.setOption(stepsOption);-->
+<!--    successRateChart.setOption(successRateOption);-->
+<!--    -->
+<!--    // 响应式调整-->
+<!--    window.addEventListener('resize', function() {-->
+<!--        stepsChart.resize();-->
+<!--        successRateChart.resize();-->
+<!--    });-->
+<!--});-->
+<!--</script>-->
 {% endblock %} 

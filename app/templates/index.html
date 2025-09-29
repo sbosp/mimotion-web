@@ -5,204 +5,215 @@
 {% block content %}
 <!-- 英雄区域 - 现代化渐变背景 -->
 <div class="relative overflow-hidden bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-  <div class="max-w-7xl mx-auto">
-    <div class="relative z-10 py-8 sm:py-16 md:py-20 lg:py-28 xl:py-32">
-      <div class="px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center">
-        <!-- 左侧文本 -->
-        <div class="text-center lg:text-left lg:w-1/2 mb-10 lg:mb-0">
-          <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
-            <span class="block">朱雀助手</span>
-            <span class="block text-yellow-300">智能刷步数神器</span>
-          </h1>
-          <p class="mt-3 text-base text-white sm:mt-5 sm:text-lg sm:max-w-xl md:mt-5 md:text-xl">
-            告别手动操作，智能时间范围设置，多账号管理，数据可视化分析，让您的运动数据更加真实可信。
-          </p>
-          <div class="mt-8 flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
-            <a href="{{ url_for('auth.register') }}" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-gray-100 md:py-4 md:text-lg md:px-10 shadow-lg transform transition hover:-translate-y-1">
-              <i class="fas fa-rocket mr-2"></i> 立即开始
-            </a>
-            <a href="{{ url_for('auth.login') }}" class="inline-flex items-center justify-center px-8 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-white hover:bg-opacity-20 md:py-4 md:text-lg md:px-10 transition">
-              <i class="fas fa-sign-in-alt mr-2"></i> 登录账号
-            </a>
-          </div>
-        </div>
-        
-        <!-- 右侧图形/动画 -->
-        <div class="lg:w-1/2 flex justify-center">
-          <div class="relative w-full max-w-lg">
-            <!-- 装饰元素 -->
-            <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-            <div class="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-            <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-            
-            <!-- 中央图标 -->
-            <div class="relative">
-              <div class="bg-white bg-opacity-90 rounded-2xl shadow-xl p-8 m-4 backdrop-filter backdrop-blur-sm">
-                <div class="flex justify-center">
-                  <i class="fas fa-walking text-indigo-600 text-9xl mb-4"></i>
+    <div class="max-w-7xl mx-auto">
+        <div class="relative z-10 py-8 sm:py-16 md:py-20 lg:py-28 xl:py-32">
+            <div class="px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center">
+                <!-- 左侧文本 -->
+                <div class="text-center lg:text-left lg:w-1/2 mb-10 lg:mb-0">
+                    <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
+                        <span class="block">朱雀助手</span>
+                        <span class="block text-yellow-300">智能刷步数神器</span>
+                    </h1>
+                    <p class="mt-3 text-base text-white sm:mt-5 sm:text-lg sm:max-w-xl md:mt-5 md:text-xl">
+                        告别手动操作，智能时间范围设置，多账号管理，数据可视化分析，让您的运动数据更加真实可信。
+                    </p>
+                    <div class="mt-8 flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="{{ url_for('auth.register') }}"
+                           class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-gray-100 md:py-4 md:text-lg md:px-10 shadow-lg transform transition hover:-translate-y-1">
+                            <i class="fas fa-rocket mr-2"></i> 立即开始
+                        </a>
+                        <a href="{{ url_for('auth.login') }}"
+                           class="inline-flex items-center justify-center px-8 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-white hover:bg-opacity-20 md:py-4 md:text-lg md:px-10 transition">
+                            <i class="fas fa-sign-in-alt mr-2"></i> 登录账号
+                        </a>
+                    </div>
                 </div>
-                <div class="text-center">
-                  <div class="text-2xl font-bold text-gray-800">今日步数目标</div>
-                  <div class="text-5xl font-bold text-indigo-600 mt-2">25,000</div>
-                  <div class="mt-2 text-sm text-gray-500">智能算法，自动递增</div>
+
+                <!-- 右侧图形/动画 -->
+                <div class="lg:w-1/2 flex justify-center">
+                    <div class="relative w-full max-w-lg">
+                        <!-- 装饰元素 -->
+                        <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+                        <div class="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+                        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+
+                        <!-- 中央图标 -->
+                        <div class="relative">
+                            <div class="bg-white bg-opacity-90 rounded-2xl shadow-xl p-8 m-4 backdrop-filter backdrop-blur-sm">
+                                <div class="flex justify-center">
+                                    <i class="fas fa-walking text-indigo-600 text-9xl mb-4"></i>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-gray-800">今日步数目标</div>
+                                    <div class="text-5xl font-bold text-indigo-600 mt-2">25,000</div>
+                                    <div class="mt-2 text-sm text-gray-500">智能算法，自动递增</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <!-- 特色功能区 -->
 <div class="py-16 bg-gray-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center">
-      <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">为什么选择我们</h2>
-      <p class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">
-        更智能的步数同步助手
-      </p>
-      <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
-        提供多种功能帮助你更好地管理和同步小米运动步数
-      </p>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">为什么选择我们</h2>
+            <p class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                更智能的步数同步助手
+            </p>
+            <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                提供多种功能帮助你更好地管理和同步运动步数
+            </p>
+        </div>
+
+        <div class="mt-16">
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+                <!-- 功能卡片 1 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-500 hover:scale-105">
+                    <div class="p-1 bg-gradient-to-r from-indigo-500 to-purple-600"></div>
+                    <div class="p-6">
+                        <div class="w-12 h-12 rounded-md bg-indigo-500 text-white flex items-center justify-center mb-4">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900">多账号管理</h3>
+                        <p class="mt-2 text-base text-gray-500">
+                            支持添加多个zepp运动账号，统一管理和监控，满足多设备需求
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 功能卡片 2 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-500 hover:scale-105">
+                    <div class="p-1 bg-gradient-to-r from-purple-600 to-pink-500"></div>
+                    <div class="p-6">
+                        <div class="w-12 h-12 rounded-md bg-purple-500 text-white flex items-center justify-center mb-4">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900">智能时间控制</h3>
+                        <p class="mt-2 text-base text-gray-500">
+                            根据时间自动计算合理的步数范围，支持自定义同步时间段
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 功能卡片 3 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-500 hover:scale-105">
+                    <div class="p-1 bg-gradient-to-r from-pink-500 to-red-500"></div>
+                    <div class="p-6">
+                        <div class="w-12 h-12 rounded-md bg-pink-500 text-white flex items-center justify-center mb-4">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900">数据可视化</h3>
+                        <p class="mt-2 text-base text-gray-500">
+                            提供步数趋势图表和同步成功率统计分析，直观了解同步情况
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 功能卡片 4 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-500 hover:scale-105">
+                    <div class="p-1 bg-gradient-to-r from-red-500 to-yellow-500"></div>
+                    <div class="p-6">
+                        <div class="w-12 h-12 rounded-md bg-red-500 text-white flex items-center justify-center mb-4">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900">自动定时同步</h3>
+                        <p class="mt-2 text-base text-gray-500">
+                            按计划自动同步步数，无需手动操作，解放双手
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="mt-16">
-      <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-        <!-- 功能卡片 1 -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-500 hover:scale-105">
-          <div class="p-1 bg-gradient-to-r from-indigo-500 to-purple-600"></div>
-          <div class="p-6">
-            <div class="w-12 h-12 rounded-md bg-indigo-500 text-white flex items-center justify-center mb-4">
-              <i class="fas fa-users"></i>
-            </div>
-            <h3 class="text-lg font-medium text-gray-900">多账号管理</h3>
-            <p class="mt-2 text-base text-gray-500">
-              支持添加多个小米运动账号，统一管理和监控，满足多设备需求
-            </p>
-          </div>
-        </div>
-
-        <!-- 功能卡片 2 -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-500 hover:scale-105">
-          <div class="p-1 bg-gradient-to-r from-purple-600 to-pink-500"></div>
-          <div class="p-6">
-            <div class="w-12 h-12 rounded-md bg-purple-500 text-white flex items-center justify-center mb-4">
-              <i class="fas fa-clock"></i>
-            </div>
-            <h3 class="text-lg font-medium text-gray-900">智能时间控制</h3>
-            <p class="mt-2 text-base text-gray-500">
-              根据时间自动计算合理的步数范围，支持自定义同步时间段
-            </p>
-          </div>
-        </div>
-
-        <!-- 功能卡片 3 -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-500 hover:scale-105">
-          <div class="p-1 bg-gradient-to-r from-pink-500 to-red-500"></div>
-          <div class="p-6">
-            <div class="w-12 h-12 rounded-md bg-pink-500 text-white flex items-center justify-center mb-4">
-              <i class="fas fa-chart-line"></i>
-            </div>
-            <h3 class="text-lg font-medium text-gray-900">数据可视化</h3>
-            <p class="mt-2 text-base text-gray-500">
-              提供步数趋势图表和同步成功率统计分析，直观了解同步情况
-            </p>
-          </div>
-        </div>
-
-        <!-- 功能卡片 4 -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-500 hover:scale-105">
-          <div class="p-1 bg-gradient-to-r from-red-500 to-yellow-500"></div>
-          <div class="p-6">
-            <div class="w-12 h-12 rounded-md bg-red-500 text-white flex items-center justify-center mb-4">
-              <i class="fas fa-history"></i>
-            </div>
-            <h3 class="text-lg font-medium text-gray-900">自动定时同步</h3>
-            <p class="mt-2 text-base text-gray-500">
-              按计划自动同步步数，无需手动操作，解放双手
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- 使用流程 -->
 <div class="py-16 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center">
-      <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">简单三步走</h2>
-      <p class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">
-        开始使用非常简单
-      </p>
-    </div>
-    
-    <div class="mt-12">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- 步骤 1 -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-          <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-indigo-100 text-indigo-600 text-2xl font-bold">1</div>
-          <h3 class="mt-4 text-xl font-medium text-gray-900">注册账号</h3>
-          <p class="mt-2 text-base text-gray-500">
-            创建您的小米运动助手账号，只需几秒钟即可完成注册
-          </p>
+            <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">简单三步走</h2>
+            <p class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                开始使用非常简单
+            </p>
         </div>
-        
-        <!-- 步骤 2 -->
-        <div class="text-center">
-          <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-indigo-100 text-indigo-600 text-2xl font-bold">2</div>
-          <h3 class="mt-4 text-xl font-medium text-gray-900">添加小米账号</h3>
-          <p class="mt-2 text-base text-gray-500">
-            添加您的zepp运动账号，设置步数范围和同步时间
-          </p>
+
+        <div class="mt-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 步骤 1 -->
+                <div class="text-center">
+                    <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-indigo-100 text-indigo-600 text-2xl font-bold">1</div>
+                    <h3 class="mt-4 text-xl font-medium text-gray-900">注册zepp账号</h3>
+                    <a href="https://sj.qq.com/appdetail/com.huami.watch.hmwatchmanager"
+                       class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-gray-100 md:py-4 md:text-lg md:px-10 shadow-lg transform transition hover:-translate-y-1">
+                        <i class="fas mr-2"></i> 点击下载zepp
+                    </a>
+
+                    <p class="mt-2 text-base text-gray-500">
+                        创建您的zepp账号，只需几秒钟即可完成注册
+                    </p>
+                </div>
+
+                <!-- 步骤 2 -->
+                <div class="text-center">
+                    <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-indigo-100 text-indigo-600 text-2xl font-bold">2</div>
+                    <h3 class="mt-4 text-xl font-medium text-gray-900">添加zepp账号</h3>
+                    <p class="mt-2 text-base text-gray-500">
+                        添加您的zepp运动账号，设置步数范围和同步时间
+                    </p>
+                </div>
+
+                <!-- 步骤 3 -->
+                <div class="text-center">
+                    <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-indigo-100 text-indigo-600 text-2xl font-bold">3</div>
+                    <h3 class="mt-4 text-xl font-medium text-gray-900">坐等自动同步</h3>
+                    <p class="mt-2 text-base text-gray-500">
+                        系统将按照您的设置自动同步步数，无需任何手动操作
+                    </p>
+                </div>
+            </div>
         </div>
-        
-        <!-- 步骤 3 -->
-        <div class="text-center">
-          <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-indigo-100 text-indigo-600 text-2xl font-bold">3</div>
-          <h3 class="mt-4 text-xl font-medium text-gray-900">坐等自动同步</h3>
-          <p class="mt-2 text-base text-gray-500">
-            系统将按照您的设置自动同步步数，无需任何手动操作
-          </p>
+
+        <div class="mt-12 text-center">
+            <a href="{{ url_for('auth.register') }}"
+               class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 shadow-lg">
+                <i class="fas fa-user-plus mr-2"></i> 立即注册体验
+            </a>
         </div>
-      </div>
     </div>
-    
-    <div class="mt-12 text-center">
-      <a href="{{ url_for('auth.register') }}" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 shadow-lg">
-        <i class="fas fa-user-plus mr-2"></i> 立即注册体验
-      </a>
-    </div>
-  </div>
 </div>
 
 <!-- 添加自定义样式 -->
 <style>
-  @keyframes blob {
-    0% {
-      transform: translate(0px, 0px) scale(1);
+    @keyframes blob {
+        0% {
+            transform: translate(0px, 0px) scale(1);
+        }
+        33% {
+            transform: translate(30px, -50px) scale(1.1);
+        }
+        66% {
+            transform: translate(-20px, 20px) scale(0.9);
+        }
+        100% {
+            transform: translate(0px, 0px) scale(1);
+        }
     }
-    33% {
-      transform: translate(30px, -50px) scale(1.1);
+
+    .animate-blob {
+        animation: blob 7s infinite;
     }
-    66% {
-      transform: translate(-20px, 20px) scale(0.9);
+
+    .animation-delay-2000 {
+        animation-delay: 2s;
     }
-    100% {
-      transform: translate(0px, 0px) scale(1);
+
+    .animation-delay-4000 {
+        animation-delay: 4s;
     }
-  }
-  .animate-blob {
-    animation: blob 7s infinite;
-  }
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-  .animation-delay-4000 {
-    animation-delay: 4s;
-  }
 </style>
 {% endblock %} 
