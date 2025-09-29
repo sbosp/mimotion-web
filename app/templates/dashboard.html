@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}仪表盘 - 小米运动助手{% endblock %}
+{% block title %}仪表盘 - 朱雀助手{% endblock %}
 
 {% block content %}
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -13,8 +13,8 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                     <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">总账号数</dt>
-                        <dd class="text-3xl font-semibold text-gray-900">{{ total_accounts }}</dd>
+                        <dt class="text-sm font-medium text-gray-500 truncate">总任务数</dt>
+                        <dd class="text-3xl font-semibold text-gray-900">{{ total_tasks }}</dd>
                     </dl>
                 </div>
             </div>
@@ -30,8 +30,8 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                     <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">活跃账号</dt>
-                        <dd class="text-3xl font-semibold text-gray-900">{{ active_accounts }}</dd>
+                        <dt class="text-sm font-medium text-gray-500 truncate">活跃任务</dt>
+                        <dd class="text-3xl font-semibold text-gray-900">{{ active_tasks }}</dd>
                     </dl>
                 </div>
             </div>
@@ -111,7 +111,7 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         {% for record in recent_records %}
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ record.account.mi_user }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ record.task.mi_user }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ record.step_count }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {% if record.status %}

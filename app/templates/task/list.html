@@ -8,13 +8,13 @@
         <h3 class="text-lg leading-6 font-medium text-gray-900">
             账号管理
         </h3>
-        <a href="{{ url_for('account.add_account') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <a href="{{ url_for('task.add_task') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <i class="fas fa-plus mr-2"></i>
             添加账号
         </a>
     </div>
     <div class="border-t border-gray-200">
-        {% if accounts %}
+        {% if tasks %}
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -40,19 +40,19 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    {% for account in accounts %}
+                    {% for task in tasks %}
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ account.mi_user }}</div>
+                            <div class="text-sm font-medium text-gray-900">{{ task.parsed_task_value.mi_user }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">{{ account.min_step }} - {{ account.max_step }}</div>
+                            <div class="text-sm text-gray-900">{{ task.parsed_task_value.min_step }} - {{ task.parsed_task_value.max_step }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">{{ "%02d"|format(account.sync_start_hour) }}:00 - {{ "%02d"|format(account.sync_end_hour) }}:00</div>
+                            <div class="text-sm text-gray-900">{{ "%02d"|format(task.hour) }}:00</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            {% if account.is_active %}
+                            {% if task.is_active %}
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                 启用
                             </span>
@@ -63,19 +63,19 @@
                             {% endif %}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ account.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                            {{ task.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                            <a href="{{ url_for('account.account_records', id=account.id) }}" class="text-indigo-600 hover:text-indigo-900">
+                            <a href="{{ url_for('task.task_records', id=task.id) }}" class="text-indigo-600 hover:text-indigo-900">
                                 <i class="fas fa-chart-line"></i> 记录
                             </a>
-                            <a href="{{ url_for('account.edit_account', id=account.id) }}" class="text-blue-600 hover:text-blue-900">
+                            <a href="{{ url_for('task.edit_task', id=task.id) }}" class="text-blue-600 hover:text-blue-900">
                                 <i class="fas fa-edit"></i> 编辑
                             </a>
-                            <a href="{{ url_for('account.sync_account', id=account.id) }}" class="text-green-600 hover:text-green-900">
+                            <a href="{{ url_for('task.sync_task', id=task.id) }}" class="text-green-600 hover:text-green-900">
                                 <i class="fas fa-sync"></i> 同步
                             </a>
-                            <a href="{{ url_for('account.delete_account', id=account.id) }}" class="text-red-600 hover:text-red-900" onclick="return confirm('确定要删除此账号吗？')">
+                            <a href="{{ url_for('task.delete_task', id=task.id) }}" class="text-red-600 hover:text-red-900" onclick="return confirm('确定要删除此账号吗？')">
                                 <i class="fas fa-trash"></i> 删除
                             </a>
                         </td>
