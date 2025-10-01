@@ -36,5 +36,5 @@ def index():
 
 @main_bp.route('/ads.text')
 def gad():
-    content = """google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0"""
+    content = """google.com, pub-7954048197441885, DIRECT, f08c47fec0942fa0"""
     return Response(content, mimetype='text/plain')
