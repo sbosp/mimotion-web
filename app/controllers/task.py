@@ -6,7 +6,6 @@ from app.models import Task, Record
 from app import db
 import app.utils.mi_motion as mitask
 from datetime import datetime, timedelta
-import random
 
 task_bp = Blueprint('task', __name__)
 
@@ -84,8 +83,8 @@ def edit_task(id):
         max_step = request.form.get('max_step', 9999)
         value = json.loads(task.task_value)
         task_value = {
-            'mi_user': value.mi_user,
-            'mi_password': value.mi_password,
+            'mi_user': value.get("mi_user", ''),
+            'mi_password': value.get("mi_password", ''),
             'min_step': min(min_step, max_step),
             'max_step': max(min_step, max_step),
         }
@@ -98,7 +97,6 @@ def edit_task(id):
 
         flash('账号更新成功')
         return redirect(url_for('task.list_tasks'))
-    print(task.hour)
     return render_template('task/edit.html', task=task, task_value=json.loads(task.task_value))
 
 
