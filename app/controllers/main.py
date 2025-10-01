@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, Response
 from flask_login import login_required, current_user
 from app.models import Task, Record
 from datetime import datetime, timedelta
@@ -36,4 +36,5 @@ def index():
 
 @main_bp.route('/ads.text')
 def gad():
-    return 'google.com, pub-7954048197441885, DIRECT, f08c47fec0942fa0'
+    content = """google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0"""
+    return Response(content, mimetype='text/plain')
