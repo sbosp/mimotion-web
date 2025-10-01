@@ -35,13 +35,13 @@ def add_task():
 
         # 验证账号
         try:
-            mi_motion = MiMotion(task_value={
+            mi_motion = mitask.MiMotionRunner(task_value={
                 'mi_user': mi_user,
                 'mi_password': mi_password,
                 'min_step': 100,
                 'max_step': 200,
             })
-            message, status = mi_motion.sync_step()  # 测试同步一个小步数
+            message, status = mi_motion.login_and_post_step()  # 测试同步一个小步数
             if not status:
                 flash('账号验证失败：' + message)
                 return redirect(url_for('task.add_task'))
