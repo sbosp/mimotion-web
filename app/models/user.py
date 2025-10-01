@@ -11,6 +11,9 @@ class User(UserMixin, db.Model):
     level = db.Column(db.String(64), default=0)
     password = db.Column(db.String(128))
     password_hash = db.Column(db.String(128))
+    vip_type = db.Column(db.Integer, default=0)
+    vip_start_time = db.Column(db.BigInteger, default=0)
+    vip_end_time = db.Column(db.BigInteger, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

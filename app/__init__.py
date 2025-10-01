@@ -4,25 +4,26 @@ from flask_apscheduler import APScheduler
 import os
 import logging
 from logging.handlers import RotatingFileHandler
-from app.scheduler import jobs
+from app.scheduler import mi_jobs
 
 # 初始化数据库
 db = SQLAlchemy()
 # 初始化定时任务
 scheduler = APScheduler()
 
+
 def create_app():
     app = Flask(__name__)
-    
+
     # 配置
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'dev-key-mimotion'
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or 'sqlite:///mimotion.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SCHEDULER_TIMEZONE'] = 'Asia/Shanghai'
-    
+
     # 初始化数据库
     db.init_app(app)
-    
+
     # 配置日志
     if not os.path.exists('app/logs'):
         os.mkdir('app/logs')
@@ -34,7 +35,7 @@ def create_app():
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.INFO)
     app.logger.info('MiMotion Flask应用启动')
-    
+
     # 注册蓝图
     from app.controllers.main import main_bp
     from app.controllers.auth import auth_bp
@@ -42,16 +43,18 @@ def create_app():
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(task_bp)
-    
+
     # 初始化定时任务
     scheduler.init_app(app)
     scheduler.start()
     if not scheduler.get_job('sync_steps'):
         scheduler.add_job(
-            func=jobs.sync_steps,
+            func=mi_jobs.sync_steps,
             trigger='cron',
             id='sync_steps',
-            hour='*'
+            hour='*',
+            misfire_grace_time=3600,  # 允许延迟1小时
+            max_instances=1  # 限制同时运行的实例数
         )
         app.logger.info('注册sync_steps定时任务')
     else:
@@ -63,5 +66,5 @@ def create_app():
     # 创建数据库表
     with app.app_context():
         db.create_all()
-    
-    return app 
+
+    return app

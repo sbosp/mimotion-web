@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 from flask_login import login_required, current_user
 from app.models import Task, Record
 from app import db
-from app.utils.mi_motion import MiMotion
+import app.utils.mi_motion as mitask
 from datetime import datetime, timedelta
 import random
 
@@ -147,8 +147,8 @@ def sync_task(id):
 
     try:
         # 同步步数
-        mi_motion = MiMotion(json.loads(task.task_value))
-        message, status = mi_motion.sync_step()
+        mi_motion = mitask.MiMotionRunner(json.loads(task.task_value))
+        message, status = mi_motion.login_and_post_step()
 
         # 记录结果
         record = Record(
