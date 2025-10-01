@@ -34,7 +34,7 @@ def index():
                            total_syncs=total_syncs)
 
 
-@main_bp.route('/ads.text')
+@main_bp.route('/ads.txt')
 def gad():
     content = """google.com, pub-7954048197441885, DIRECT, f08c47fec0942fa0"""
     return Response(content, mimetype='text/plain')
