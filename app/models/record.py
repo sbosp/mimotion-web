@@ -1,3 +1,5 @@
+import pytz
+
 from app import db
 from datetime import datetime
 
@@ -12,7 +14,7 @@ class Record(db.Model):
     task_value = db.Column(db.String(), default='')  # 步数
     status = db.Column(db.Boolean, default=True)  # 是否成功
     message = db.Column(db.String(255))  # 执行结果消息
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(pytz.timezone('Asia/Shanghai')))
 
     def __repr__(self):
         return f'<Record {self.task_value}>'

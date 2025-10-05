@@ -1,5 +1,6 @@
 from app import db
 from datetime import datetime
+import pytz
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
@@ -14,8 +15,8 @@ class User(UserMixin, db.Model):
     vip_type = db.Column(db.Integer, default=0)
     vip_start_time = db.Column(db.BigInteger, default=0)
     vip_end_time = db.Column(db.BigInteger, default=0)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(pytz.timezone('Asia/Shanghai')))
+    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(pytz.timezone('Asia/Shanghai')), onupdate=lambda: datetime.now(pytz.timezone('Asia/Shanghai')))
 
     # 关联账号
     tasks = db.relationship('Task', backref='owner', lazy='dynamic')

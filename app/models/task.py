@@ -1,3 +1,5 @@
+import pytz
+
 from app import db
 from datetime import datetime
 
@@ -15,8 +17,8 @@ class Task(db.Model):
     day = db.Column(db.Integer, default=0)
     hour = db.Column(db.Integer, default=0)
     minute = db.Column(db.Integer, default=0)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(pytz.timezone('Asia/Shanghai')))
+    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(pytz.timezone('Asia/Shanghai')), onupdate=lambda: datetime.now(pytz.timezone('Asia/Shanghai')))
     
     # 关联任务执行流水记录
     records = db.relationship('Record', backref='task', lazy='dynamic')
