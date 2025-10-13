@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }} - 用户详情 - 朱雀助手{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- 返回按钮 -->
+    <div class="mb-4">
+        <a href="{{ url_for('admin.user_management') }}" 
+           class="inline-flex items-center text-indigo-600 hover:text-indigo-900">
+            <i class="fas fa-arrow-left mr-2"></i>返回用户列表
+        </a>
+    </div>
+
+    <div class="bg-white shadow rounded-lg">
+        <!-- 页面标题 -->
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">用户详情</h3>
+            <p class="mt-1 text-sm text-gray-500">{{ user.username }} 的详细信息</p>
+        </div>
+
+        <!-- 基本信息 -->
+        <div class="px-4 py-5 sm:p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 左侧：用户基本信息 -->
+                <div>
+                    <h4 class="text-md font-medium text-gray-900 mb-4">基本信息</h4>
+                    <dl class="grid grid-cols-1 gap-4">
+                        <div class="bg-gray-50 px-4 py-3 rounded">
+                            <dt class="text-sm font-medium text-gray-500">用户ID</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ user.id }}</dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 rounded">
+                            <dt class="text-sm font-medium text-gray-500">用户名</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ user.username }}</dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 rounded">
+                            <dt class="text-sm font-medium text-gray-500">邮箱</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ user.email }}</dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 rounded">
+                            <dt class="text-sm font-medium text-gray-500">用户等级</dt>
+                            <dd class="mt-1">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    {% if user.level == 1 %}bg-red-100 text-red-800
+                                    {% elif user.level == 'vip' %}bg-purple-100 text-purple-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {{ '管理员' if user.level == 1 else '普通用户' }}
+                                </span>
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <!-- 右侧：VIP信息和时间信息 -->
+                <div>
+                    <h4 class="text-md font-medium text-gray-900 mb-4">VIP信息</h4>
+                    <dl class="grid grid-cols-1 gap-4">
+                        <div class="bg-gray-50 px-4 py-3 rounded">
+                            <dt class="text-sm font-medium text-gray-500">VIP类型</dt>
+                            <dd class="mt-1">
+                                {% if user.vip_type == 1 %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    月VIP
+                                </span>
+                                {% elif user.vip_type == 2 %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                                    年VIP
+                                </span>
+                                {% else %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                    普通用户
+                                </span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 rounded">
+                            <dt class="text-sm font-medium text-gray-500">VIP开始时间</dt>
+                            <dd class="mt-1 text-sm text-gray-900">
+                                {% if vip_start_time %}
+                                    {{ vip_start_time.strftime('%Y-%m-%d %H:%M:%S') }}
+                                {% else %}
+                                    未开通
+                                {% endif %}
+                            </dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 rounded">
+                            <dt class="text-sm font-medium text-gray-500">VIP结束时间</dt>
+                            <dd class="mt-1 text-sm text-gray-900">
+                                {% if vip_end_time %}
+                                    {{ vip_end_time.strftime('%Y-%m-%d %H:%M:%S') }}
+                                {% else %}
+                                    未开通
+                                {% endif %}
+                            </dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 rounded">
+                            <dt class="text-sm font-medium text-gray-500">VIP状态</dt>
+                            <dd class="mt-1">
+                                {% if vip_end_time and vip_end_time.timestamp() > now_timestamp %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    有效
+                                </span>
+                                {% else %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    已过期
+                                </span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- 时间信息 -->
+            <div class="mt-6">
+                <h4 class="text-md font-medium text-gray-900 mb-4">时间信息</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-50 px-4 py-3 rounded">
+                        <dt class="text-sm font-medium text-gray-500">注册时间</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</dd>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 rounded">
+                        <dt class="text-sm font-medium text-gray-500">最后更新</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ user.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</dd>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="mt-6 flex space-x-4">
+                <a href="{{ url_for('admin.toggle_user_active', user_id=user.id) }}" 
+                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                    <i class="fas fa-toggle-on mr-2"></i>切换状态
+                </a>
+                <button type="button" 
+                        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <i class="fas fa-edit mr-2"></i>编辑信息
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// 这里可以添加一些交互功能
+document.addEventListener('DOMContentLoaded', function() {
+    // 可以添加一些动态功能，比如确认对话框等
+});
+</script>
+{% endblock %}

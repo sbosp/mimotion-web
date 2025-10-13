@@ -21,13 +21,19 @@
                 {% if current_user.is_authenticated %}
                 <div class="flex ml-6 space-x-8">
                     <a href="{{ url_for('main.index') }}"
-                       class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium {% if request.endpoint == 'main.index' %}border-indigo-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
-                        仪表盘
+                       class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium {% if request.endpoint.startswith('main') %}border-indigo-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
+                        首页
                     </a>
                     <a href="{{ url_for('task.list_tasks') }}"
-                       class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium {% if request.endpoint != 'main.index' %}border-indigo-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
-                        账号管理
+                       class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium {% if request.endpoint.startswith('task') %}border-indigo-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
+                        任务
                     </a>
+                    {% if current_user.level == 1 %}
+                        <a href="{{ url_for('admin.task_statistics') }}"
+                           class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium {% if request.endpoint.startswith('admin') %}border-indigo-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
+                            管理台
+                        </a>
+                    {% endif %}
                 </div>
                 {% endif %}
             </div>

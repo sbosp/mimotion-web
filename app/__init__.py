@@ -40,9 +40,11 @@ def create_app():
     from app.controllers.main import main_bp
     from app.controllers.auth import auth_bp
     from app.controllers.task import task_bp
+    from app.controllers.admin import admin_bp
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(task_bp)
+    app.register_blueprint(admin_bp)
 
     # 初始化定时任务
     scheduler.init_app(app)
