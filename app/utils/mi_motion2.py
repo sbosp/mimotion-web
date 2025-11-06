@@ -9,9 +9,24 @@ global skey, sckey, base_url, req_url, corpid, corpsecret, agentid, touser, topa
 
 
 # 虚拟ip地址
-def fake_ip():
+def generate_fake_ip():
     # 随便找的国内IP段：223.64.0.0 - 223.117.255.255
     return f"{223}.{random.randint(64, 117)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
+
+# 获取伪造的IP头信息
+def get_fake_ip_headers():
+    xip = generate_fake_ip()
+    return {
+        "X-Forwarded-For": xip,           # 最常用的代理IP头
+        "X-Real-IP": xip,                 # 真实IP头
+        "X-Originating-IP": xip,          # 原始IP头
+        "X-Remote-IP": xip,               # 远程IP头
+        "X-Client-IP": xip,               # 客户端IP头
+        "True-Client-IP": xip,            # 真实客户端IP头
+        "CF-Connecting-IP": xip,          # Cloudflare连接IP头
+        "Forwarded": f"for={xip}",       # 标准Forwarded头
+        "Via": "1.1 varnish"                 # 添加Via头模拟代理服务器
+    }
 
 
 class MiMotion():
@@ -20,12 +35,12 @@ class MiMotion():
     def __init__(self, check_item):
         self.check_item = check_item
         self.step_count = 6666
-        self.fake_ip_addr = fake_ip()
+        self.fake_ip_headers = get_fake_ip_headers()
         self.headers = {
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             "User-Agent": "MiFit/6.12.0 (MCE16; Android 16; Density/1.5)",
             "app_name": "com.xiaomi.hm.health",
-            "X-Forwarded-For": self.fake_ip_addr
+            **self.fake_ip_headers
         }
 
     def get_time(self):
@@ -80,7 +95,7 @@ class MiMotion():
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             "User-Agent": "MiFit/6.12.0 (MCE16; Android 16; Density/1.5)",
             "app_name": "com.xiaomi.hm.health",
-            "X-Forwarded-For": self.fake_ip_addr
+            **self.fake_ip_headers
         }
         data1 = {
             "client_id": "HuaMi",
@@ -183,7 +198,7 @@ class MiMotion():
             headers = {
                 "apptoken": app_token,
                 "Content-Type": "application/x-www-form-urlencoded",
-                "X-Forwarded-For": self.fake_ip_addr
+                **self.fake_ip_headers
             }
             data = f'userid={userid}&last_sync_data_time=1628256960&device_type=0&last_deviceid=C4BDB6FFFE2BCA4C&data_json={data_json}'
 
