@@ -19,7 +19,7 @@ def sync_steps():
     """每小时同步步数"""
     from app import scheduler, db
     from app.models import Task, Record
-    import app.utils.mi_motion as mitask
+    import app.utils.mi_motion2 as mitask
     with scheduler.app.app_context():
         # 获取当前小时
         current_hour = datetime.now(pytz.timezone('Asia/Shanghai')).hour
@@ -36,8 +36,8 @@ def sync_steps():
         for task in tasks:
             try:
                 # 执行任务
-                mi_motion = mitask.MiMotionRunner(json.loads(task.task_value))
-                message, status = mi_motion.login_and_post_step()
+                mi_motion = mitask.MiMotion(json.loads(task.task_value))
+                message, status = mi_motion.main()
 
                 # 记录结果
                 record = Record(

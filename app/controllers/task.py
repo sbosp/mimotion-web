@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 from flask_login import login_required, current_user
 from app.models import Task, Record
 from app import db
-import app.utils.mi_motion as mitask
+import app.utils.mi_motion2 as mitask
 from datetime import datetime, timedelta
 
 task_bp = Blueprint('task', __name__)
@@ -34,13 +34,13 @@ def add_task():
 
         # 验证账号
         try:
-            mi_motion = mitask.MiMotionRunner(task_value={
+            mi_motion = mitask.MiMotion({
                 'mi_user': mi_user,
                 'mi_password': mi_password,
                 'min_step': 100,
                 'max_step': 200,
             })
-            message, status = mi_motion.login_and_post_step()  # 测试同步一个小步数
+            message, status = mi_motion.main()  # 测试同步一个小步数
             if not status:
                 flash('账号验证失败：' + message)
                 return redirect(url_for('task.add_task'))
@@ -145,8 +145,8 @@ def sync_task(id):
 
     try:
         # 同步步数
-        mi_motion = mitask.MiMotionRunner(json.loads(task.task_value))
-        message, status = mi_motion.login_and_post_step()
+        mi_motion = mitask.MiMotion(json.loads(task.task_value))
+        message, status = mi_motion.main()
 
         # 记录结果
         record = Record(
