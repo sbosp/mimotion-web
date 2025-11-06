@@ -8,16 +8,24 @@ from datetime import datetime
 global skey, sckey, base_url, req_url, corpid, corpsecret, agentid, touser, toparty, totag, open_get_weather, area, qweather
 
 
+# 虚拟ip地址
+def fake_ip():
+    # 随便找的国内IP段：223.64.0.0 - 223.117.255.255
+    return f"{223}.{random.randint(64, 117)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
+
+
 class MiMotion():
     name = "小米运动"
 
     def __init__(self, check_item):
         self.check_item = check_item
         self.step_count = 6666
+        self.fake_ip_addr = fake_ip()
         self.headers = {
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             "User-Agent": "MiFit/6.12.0 (MCE16; Android 16; Density/1.5)",
             "app_name": "com.xiaomi.hm.health",
+            "X-Forwarded-For": self.fake_ip_addr
         }
 
     def get_time(self):
@@ -71,7 +79,8 @@ class MiMotion():
         headers = {
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             "User-Agent": "MiFit/6.12.0 (MCE16; Android 16; Density/1.5)",
-            "app_name": "com.xiaomi.hm.health"
+            "app_name": "com.xiaomi.hm.health",
+            "X-Forwarded-For": self.fake_ip_addr
         }
         data1 = {
             "client_id": "HuaMi",
@@ -171,7 +180,11 @@ class MiMotion():
             data_json = data_json.replace('2025-08-17', today).replace('17760', str(self.step_count))
 
             url = f'https://api-mifit-cn.huami.com/v1/data/band_data.json?t={t}'  # 去空格
-            headers = {"apptoken": app_token, "Content-Type": "application/x-www-form-urlencoded"}
+            headers = {
+                "apptoken": app_token,
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-Forwarded-For": self.fake_ip_addr
+            }
             data = f'userid={userid}&last_sync_data_time=1628256960&device_type=0&last_deviceid=C4BDB6FFFE2BCA4C&data_json={data_json}'
 
             resp = requests.post(url, data=data, headers=headers, timeout=10)
