@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 from flask_login import login_required, current_user
 from app.models import Task, Record
 from app import db
-import app.utils.mi_motion2 as mitask
+import app.utils.mi_utils as mitask
 from datetime import datetime, timedelta
 
 task_bp = Blueprint('task', __name__)
@@ -34,13 +34,13 @@ def add_task():
 
         # 验证账号
         try:
-            mi_motion = mitask.MiMotion({
+            # 测试同步一个小步数
+            task_value, status, message, step_count = mitask.run({
                 'mi_user': mi_user,
                 'mi_password': mi_password,
                 'min_step': 100,
                 'max_step': 200,
             })
-            message, status = mi_motion.main()  # 测试同步一个小步数
             if not status:
                 flash('账号验证失败：' + message)
                 return redirect(url_for('task.add_task'))
@@ -48,12 +48,8 @@ def add_task():
             flash('账号验证失败：' + str(e))
             return redirect(url_for('task.add_task'))
 
-        task_value = {
-            'mi_user': mi_user,
-            'mi_password': mi_password,
-            'min_step': min(min_step, max_step),
-            'max_step': max(min_step, max_step),
-        }
+        task_value['min_step'] = min(min_step, max_step)
+        task_value['max_step'] = max(min_step, max_step)
         task = Task(
             owner=current_user,
             task_type=1,
@@ -81,13 +77,9 @@ def edit_task(id):
     if request.method == 'POST':
         min_step = request.form.get('min_step', 6666)
         max_step = request.form.get('max_step', 9999)
-        value = json.loads(task.task_value)
-        task_value = {
-            'mi_user': value.get("mi_user", ''),
-            'mi_password': value.get("mi_password", ''),
-            'min_step': min(min_step, max_step),
-            'max_step': max(min_step, max_step),
-        }
+        task_value = json.loads(task.task_value)
+        task_value['min_step'] = min(min_step, max_step)
+        task_value['max_step'] = max(min_step, max_step)
         task.task_value = json.dumps(task_value)
         task.day = 1
         task.hour = request.form.get('sync_start_hour', 8)
@@ -145,20 +137,20 @@ def sync_task(id):
 
     try:
         # 同步步数
-        mi_motion = mitask.MiMotion(json.loads(task.task_value))
-        message, status = mi_motion.main()
-
+        task_value, status, message, step_count = mitask.run(json.loads(task.task_value))
         # 记录结果
         record = Record(
             task_id=task.id,
             user_id=task.user_id,
             task_type=1,
-            task_params=task.task_value,
-            task_name=json.loads(task.task_value).get('mi_user',''),
-            task_value=str(mi_motion.step_count),
+            task_params=json.dumps(task_value),
+            task_name=task_value.get('mi_user', ''),
+            task_value=str(step_count),
             status=status,
             message=message
         )
+        # 更新一下task 中的 task_value
+        task.task_value = json.dumps(task_value)
         db.session.add(record)
         db.session.commit()
 
