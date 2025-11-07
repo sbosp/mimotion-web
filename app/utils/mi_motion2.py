@@ -13,19 +13,20 @@ def generate_fake_ip():
     # 随便找的国内IP段：223.64.0.0 - 223.117.255.255
     return f"{223}.{random.randint(64, 117)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
 
+
 # 获取伪造的IP头信息
 def get_fake_ip_headers():
     xip = generate_fake_ip()
     return {
-        "X-Forwarded-For": xip,           # 最常用的代理IP头
-        "X-Real-IP": xip,                 # 真实IP头
-        "X-Originating-IP": xip,          # 原始IP头
-        "X-Remote-IP": xip,               # 远程IP头
-        "X-Client-IP": xip,               # 客户端IP头
-        "True-Client-IP": xip,            # 真实客户端IP头
-        "CF-Connecting-IP": xip,          # Cloudflare连接IP头
-        "Forwarded": f"for={xip}",       # 标准Forwarded头
-        "Via": "1.1 varnish"                 # 添加Via头模拟代理服务器
+        "X-Forwarded-For": xip,  # 最常用的代理IP头
+        "X-Real-IP": xip,  # 真实IP头
+        "X-Originating-IP": xip,  # 原始IP头
+        "X-Remote-IP": xip,  # 远程IP头
+        "X-Client-IP": xip,  # 客户端IP头
+        "True-Client-IP": xip,  # 真实客户端IP头
+        "CF-Connecting-IP": xip,  # Cloudflare连接IP头
+        "Forwarded": f"for={xip}",  # 标准Forwarded头
+        "Via": "1.1 varnish"  # 添加Via头模拟代理服务器
     }
 
 
@@ -212,18 +213,15 @@ class MiMotion():
                 msg = (f"帐号信息: {user[:4]}****{user[-4:]}\n"
                        f"修改信息: success\n"
                        f"修改步数: {self.step_count}\n")
-                print(msg)
                 return msg, login_token, userid, app_token, True
             else:
                 msg = (f"帐号信息: {user[:4]}****{user[-4:]}\n"
                        f"修改信息: 失败-{res_json}\n")
-                print(msg)
                 return msg, login_token, userid, app_token, False
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
             msg = f"【异常】账号 {user[:4]}****{user[-4:]} 提交失败：{e}\n"
-            print(msg)
             return msg, login_token, userid, app_token, False
 
     def main(self):
@@ -249,21 +247,21 @@ class MiMotion():
             # 有缓存token，先尝试上传步数
             print("有缓存token，先尝试上传步数")
             message, login_token, userid, app_token, status = self.upload_step(user, login_token, userid, app_token)
-            print(message, login_token, userid, app_token, status)
             if status:
-                return message, login_token, userid, app_token, status, True
+                return message, login_token, userid, app_token, status, True, self.step_count
             # token失效，需要重新登录
+            print("token失效，需要重新登录")
             login_token, userid, app_token = self.login(user, password)
 
         # 验证登录结果
         if 0 in (login_token, userid, app_token):
             message = f"帐号信息: {user[:4]}****{user[-4:]}\n修改信息: 登录失败\n"
             print(message)
-            return message, login_token, userid, app_token, False, False
+            return message, login_token, userid, app_token, False, False, 0
 
         # 登录成功，上传步数
         message, login_token, userid, app_token, status = self.upload_step(user, login_token, userid, app_token)
-        return message, login_token, userid, app_token, status, False
+        return message, login_token, userid, app_token, status, False, self.step_count
 
 
 if __name__ == "__main__":

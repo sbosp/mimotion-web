@@ -1,22 +1,21 @@
-import app.utils.mi_motion2 as mitask
+import app.utils.mi_motion as mitask
+import app.utils.mi_motion2 as mitask2
 
 
 def run(task_value: dict):
-    '''{
-                'mi_user': mi_user,
-                'mi_password': mi_password,
-                'min_step': 100,
-                'max_step': 200,
-            }
-            '''
-    mi_motion = mitask.MiMotion(check_item=task_value)
-    message, login_token, userid, app_token, status, cache = mi_motion.main()
+    message, login_token, userid, app_token, status, cache, step_count = mitask.MiMotionRunner(
+        task_value).login_and_post_step()
+    if not status:
+        message, login_token, userid, app_token, status, cache, step_count = mitask2.MiMotion(
+            check_item=task_value).main()
+
+    print(message, status, step_count, cache, userid, app_token, login_token, )
     if status:
         task_value['login_token'] = login_token or ''
         task_value['userid'] = userid or ''
         task_value['app_token'] = app_token or ''
     task_value['cache'] = cache or False
-    return task_value, status, message, mi_motion.step_count
+    return task_value, status, message, step_count
 
 
 if __name__ == "__main__":
