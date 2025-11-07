@@ -113,7 +113,7 @@ class MiMotion():
             r1 = requests.post(url1, data=data1, headers=headers, timeout=10, allow_redirects=False)
             if r1.status_code != 200:
                 print(f"[登录阶段1] 状态码={r1.status_code} 响应={r1.text}")
-                return 0, 0, 0
+                return '', '', ''
             code = r1.json()["access"]
         except Exception as e:
             print("[登录阶段1] 异常:", e)
@@ -122,7 +122,7 @@ class MiMotion():
             except:
                 pass
             print("登录失败")
-            return 0, 0, 0
+            return '', '', ''
 
         # ---------- 阶段 2：拿 token ----------
         url2 = "https://account.zepp.com/v2/client/login"
@@ -175,7 +175,7 @@ class MiMotion():
             r2 = requests.post(url2, data=data2, headers=headers, timeout=10)
             if r2.status_code != 200:
                 print(f"[登录阶段2] 状态码={r2.status_code} 响应={r2.text}")
-                return 0, 0, 0
+                return '', '', ''
             info = r2.json()["token_info"]
             return info["login_token"], info["user_id"], info["app_token"]
         except Exception as e:
@@ -185,7 +185,7 @@ class MiMotion():
             except:
                 pass
             print("获取 token 失败")
-            return 0, 0, 0
+            return '', '', ''
 
     def upload_step(self, user, login_token, userid, app_token):
         try:
@@ -254,7 +254,7 @@ class MiMotion():
             login_token, userid, app_token = self.login(user, password)
 
         # 验证登录结果
-        if 0 in (login_token, userid, app_token):
+        if '' in (login_token, userid, app_token):
             message = f"帐号信息: {user[:4]}****{user[-4:]}\n修改信息: 登录失败\n"
             print(message)
             return message, login_token, userid, app_token, False, False, 0

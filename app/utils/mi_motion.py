@@ -152,10 +152,10 @@ class MiMotionRunner:
             code = get_access_token(location)
             if code is None:
                 self.log_str += "获取accessToken失败\n"
-                return 0, 0
+                return '', ''
         except:
             self.log_str += f"获取accessToken异常:{traceback.format_exc()}\n"
-            return 0, 0
+            return '', ''
         # print("access_code获取成功！")
         # print(code)
 
@@ -188,10 +188,10 @@ class MiMotionRunner:
                 "third_name": "email",
             }
         r2 = requests.post(url2, data=data2, headers=headers).json()
-        login_token = r2["token_info"]["login_token"]
+        login_token = r2.get("token_info", {}).get('login_token', '')
         # print("login_token获取成功！")
         # print(login_token)
-        userid = r2["token_info"]["user_id"]
+        userid = r2.get("token_info", {}).get('user_id', '')
         # print("userid获取成功！")
         # print(userid)
 
@@ -263,7 +263,7 @@ class MiMotionRunner:
             app_token = self.get_app_token(login_token)
 
         # 验证登录结果
-        if 0 in (login_token, userid, app_token):
+        if '' in (login_token, userid, app_token):
             return self.log_str, login_token, userid, app_token, False, False, 0
 
         # 登录成功，上传步数

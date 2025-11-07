@@ -5,9 +5,17 @@ import app.utils.mi_motion2 as mitask2
 def run(task_value: dict):
     message, login_token, userid, app_token, status, cache, step_count = mitask.MiMotionRunner(
         task_value).login_and_post_step()
+    print(message, status, step_count, cache, userid, app_token, login_token, )
+    task_value['login_token'] = login_token or ''
+    task_value['userid'] = userid or ''
+    task_value['app_token'] = app_token or ''
     if not status:
         message, login_token, userid, app_token, status, cache, step_count = mitask2.MiMotion(
             check_item=task_value).main()
+        print(message, status, step_count, cache, userid, app_token, login_token, )
+        task_value['login_token'] = login_token or ''
+        task_value['userid'] = userid or ''
+        task_value['app_token'] = app_token or ''
 
     print(message, status, step_count, cache, userid, app_token, login_token, )
     task_value['login_token'] = login_token or ''
