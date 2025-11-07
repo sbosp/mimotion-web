@@ -10,10 +10,9 @@ def run(task_value: dict):
             check_item=task_value).main()
 
     print(message, status, step_count, cache, userid, app_token, login_token, )
-    if status:
-        task_value['login_token'] = login_token or ''
-        task_value['userid'] = userid or ''
-        task_value['app_token'] = app_token or ''
+    task_value['login_token'] = login_token or ''
+    task_value['userid'] = userid or ''
+    task_value['app_token'] = app_token or ''
     task_value['cache'] = cache or False
     return task_value, status, message, step_count
 
