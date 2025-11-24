@@ -93,10 +93,10 @@ class MiMotionRunner:
         mi_password = task_value.get("mi_password", '')
         self.min_step = int(task_value.get("min_step", '6666'))
         self.max_step = int(task_value.get("max_step", '9999'))
+        self.step_count = random.randint(min(self.min_step, self.max_step), max(self.min_step, self.max_step))
         self.login_token = str(task_value.get("login_token", ""))
         self.userid = str(task_value.get("userid", ""))
         self.app_token = str(task_value.get("app_token", ""))
-        self.step_count = random.randint(self.min_step, self.max_step)
         self.invalid = False
         self.log_str = ""
         if mi_user == '' or mi_password == '':

@@ -35,7 +35,9 @@ class MiMotion():
 
     def __init__(self, check_item):
         self.check_item = check_item
-        self.step_count = 6666
+        self.min_step = int(check_item.get("min_step", '6666'))
+        self.max_step = int(check_item.get("max_step", '9999'))
+        self.step_count = random.randint(min(self.min_step, self.max_step), max(self.min_step, self.max_step))
         self.fake_ip_headers = get_fake_ip_headers()
         self.headers = {
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
