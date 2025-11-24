@@ -178,8 +178,8 @@ class MiMotion():
             if r2.status_code != 200:
                 print(f"[登录阶段2] 状态码={r2.status_code} 响应={r2.text}")
                 return '', '', ''
-            info = r2.json()["token_info"]
-            return info["login_token"], info["user_id"], info["app_token"]
+            info = r2.json().get("token_info", {})
+            return info.get('login_token', ''), info.get('user_id', ''), info.get('app_token', '')
         except Exception as e:
             print("[登录阶段2] 异常:", e)
             try:

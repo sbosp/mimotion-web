@@ -205,7 +205,7 @@ class MiMotionRunner:
             **self.fake_ip_headers
         }
         response = requests.get(url, headers=headers).json()
-        app_token = response['token_info']['app_token']
+        app_token = response.get("token_info", {}).get('app_token', '')
         # print("app_token获取成功！")
         # print(app_token)
         return app_token
