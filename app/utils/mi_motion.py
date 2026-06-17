@@ -187,13 +187,18 @@ class MiMotionRunner:
                 "source": "com.xiaomi.hm.health",
                 "third_name": "email",
             }
-        r2 = requests.post(url2, data=data2, headers=headers).json()
-        login_token = r2.get("token_info", {}).get('login_token', '')
-        # print("login_token获取成功！")
-        # print(login_token)
-        userid = r2.get("token_info", {}).get('user_id', '')
-        # print("userid获取成功！")
-        # print(userid)
+        login_token = None
+        userid = None
+        try:
+            r2 = requests.post(url2, data=data2, headers=headers).json()
+            login_token = r2.get("token_info", {}).get('login_token', '')
+            # print("login_token获取成功！")
+            # print(login_token)
+            userid = r2.get("token_info", {}).get('user_id', '')
+            # print("userid获取成功！")
+            # print(userid)
+        except Exception as e:
+            print(e)
 
         return login_token, userid
 
@@ -244,13 +249,14 @@ class MiMotionRunner:
             return "账号或密码配置有误", '', '', '', False, False, 0
         self.log_str += f"已设置为随机步数范围({self.min_step}~{self.max_step}) 随机值:{self.step_count}\n"
         print(self.login_token, self.userid, self.app_token)
-
+        app_token = ''
         # 检查是否需要重新登录
         if '' in (self.login_token, self.userid, self.app_token):
             print("无缓存token，需要登录")
             # 无缓存token，需要登录
             login_token, userid = self.login()
-            app_token = self.get_app_token(login_token)
+            if login_token is not None:
+                app_token = self.get_app_token(login_token)
         else:
             # 有缓存token，先尝试上传步数
             print("有缓存token，先尝试上传步数")
@@ -260,7 +266,8 @@ class MiMotionRunner:
                 return message, self.login_token, self.userid, self.app_token, True, True, self.step_count
             # token失效，需要重新登录
             login_token, userid = self.login()
-            app_token = self.get_app_token(login_token)
+            if login_token is not None:
+                app_token = self.get_app_token(login_token)
 
         # 验证登录结果
         if '' in (login_token, userid, app_token):
