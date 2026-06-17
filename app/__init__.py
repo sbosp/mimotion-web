@@ -56,7 +56,7 @@ def create_app():
             id='sync_steps',
             hour='*',
             misfire_grace_time=3600,  # 允许延迟1小时
-            max_instances=1  # 限制同时运行的实例数
+            max_instances=3  # 增加同时运行的实例数，避免任务被跳过
         )
         app.logger.info('注册sync_steps定时任务')
     else:
