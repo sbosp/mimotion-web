@@ -16,7 +16,12 @@ def list_tasks():
     tasks = current_user.tasks.all()
     parsed_tasks = []
     for task in tasks:
-        task.parsed_task_value = json.loads(task.task_value)
+        task_value = json.loads(task.task_value)
+        min_step = int(task_value.get('min_step', 6666))
+        max_step = int(task_value.get('max_step', 9999))
+        task_value['min_step'] = min(min_step, max_step)
+        task_value['max_step'] = max(min_step, max_step)
+        task.parsed_task_value = task_value
         parsed_tasks.append(task)
     return render_template('task/list.html', tasks=parsed_tasks)
 
@@ -27,8 +32,8 @@ def add_task():
     if request.method == 'POST':
         mi_user = request.form.get('mi_user')
         mi_password = request.form.get('mi_password')
-        min_step = request.form.get('min_step', 6666)
-        max_step = request.form.get('max_step', 9999)
+        min_step = int(request.form.get('min_step', 6666))
+        max_step = int(request.form.get('max_step', 9999))
         sync_start_hour = request.form.get('sync_start_hour', 8)
         # sync_end_hour = request.form.get('sync_end_hour', 22)
 
@@ -75,8 +80,8 @@ def edit_task(id):
         return redirect(url_for('task.list_tasks'))
 
     if request.method == 'POST':
-        min_step = request.form.get('min_step', 6666)
-        max_step = request.form.get('max_step', 9999)
+        min_step = int(request.form.get('min_step', 6666))
+        max_step = int(request.form.get('max_step', 9999))
         task_value = json.loads(task.task_value)
         task_value['min_step'] = min(min_step, max_step)
         task_value['max_step'] = max(min_step, max_step)
@@ -89,7 +94,12 @@ def edit_task(id):
 
         flash('账号更新成功')
         return redirect(url_for('task.list_tasks'))
-    return render_template('task/edit.html', task=task, task_value=json.loads(task.task_value))
+    task_value = json.loads(task.task_value)
+    min_step = int(task_value.get('min_step', 6666))
+    max_step = int(task_value.get('max_step', 9999))
+    task_value['min_step'] = min(min_step, max_step)
+    task_value['max_step'] = max(min_step, max_step)
+    return render_template('task/edit.html', task=task, task_value=task_value)
 
 
 @task_bp.route('/task/<int:id>/delete')
@@ -123,8 +133,12 @@ def task_records(id):
         Record.created_at >= start_date,
         Record.created_at <= end_date
     ).order_by(Record.created_at.desc()).all()
-
-    return render_template('task/records.html', task=task, task_value=json.loads(task.task_value), records=records)
+    task_value = json.loads(task.task_value)
+    min_step = int(task_value.get('min_step', 6666))
+    max_step = int(task_value.get('max_step', 9999))
+    task_value['min_step'] = min(min_step, max_step)
+    task_value['max_step'] = max(min_step, max_step)
+    return render_template('task/records.html', task=task, task_value=task_value, records=records)
 
 
 @task_bp.route('/task/<int:id>/sync')
@@ -137,7 +151,12 @@ def sync_task(id):
 
     try:
         # 同步步数
-        task_value, status, message, step_count = mitask.run(json.loads(task.task_value))
+        task_value = json.loads(task.task_value)
+        min_step = int(task_value.get('min_step', 6666))
+        max_step = int(task_value.get('max_step', 9999))
+        task_value['min_step'] = min(min_step, max_step)
+        task_value['max_step'] = max(min_step, max_step)
+        task_value, status, message, step_count = mitask.run(task_value)
         # 记录结果
         record = Record(
             task_id=task.id,
